@@ -1,0 +1,56 @@
+/* Empty. Add your own CSS if you like */
+.display {
+  text-align: center;
+}
+
+
+.tile-select {
+}
+.tile-drop {
+  background: #EEE4DA;
+  min-height: 60px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  margin: 10px;
+  z-index: 10;
+  font-size: 3rem;
+  padding: 10px;
+}
+.tile-drop.hover{
+  opacity: 0.6;
+}
+.tile-drop > span {
+  font-size: 1.2rem;
+  color: darkgray;
+  line-height: 10px;
+  position: absolute;
+}
+.tile {
+  border-radius: 2px;
+  border: solid #666 2px;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  font-size: 1.6rem;
+  text-align: center;
+  margin:5px;
+  display: inline-block;
+  z-index: 100;
+}
+.tile.dropped {
+  display: none;
+}
+
+/*"#EEE4DA", // 2*/
+/*"#EAE0C8", // 4*/
+/*"#F59563", // 8*/
+/*"#3399ff", // 16*/
+/*"#ffa333", // 32*/
+/*"#cef030", // 64*/
+/*"#E8D8CE", // 128*/
+/*"#990303", // 256*/
+/*"#6BA5DE", // 512*/
+/*"#DCAD60", // 1024*/
+/*"#B60022" // 2048*/

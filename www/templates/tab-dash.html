@@ -1,0 +1,30 @@
+<ion-view view-title="Gameboard">
+  <ion-content id="game-board" class="padding" scroll="false">
+
+    <button class="button button-outline button-assertive button"> Restart </button>
+
+    <div class="display">
+      <h1>21</h1>
+      <p>Result: {{result ? result : 0}}</p>
+    </div>
+
+    <div class="row">
+      <div class="tile col">1</div>
+      <div class="tile col">1</div>
+      <div class="tile col">1</div>
+      <div class="tile col">1</div>
+
+    </div>
+    <div class="row">
+      <div class="tile col">+</div>
+      <div class="tile col">-</div>
+      <div class="tile col">*</div>
+      <div class="tile col">/</div>
+    </div>
+
+    <div class="tile-drop">
+      <span ng-hide="">Tiles goes here</span>
+    </div>
+
+  </ion-content>
+</ion-view>
