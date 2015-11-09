@@ -1,13 +1,24 @@
 angular.module('starter.controllers', [])
 
-.controller('DashCtrl', function($scope) {
+.controller('DashCtrl', function($scope, $state) {
     var gameBoard = $("#game-board")
     var tiles = $(".tile");
     var drop = $(".tile-drop");
     var tileWidth = null;
     var placeholder = drop.find('span');
+    var range = NUMBERS.length;
+    var cards = $('#cards');
 
+    //start new game
+    $scope.startNew = startNew;
+    deal();
+
+    //do something when success
     $scope.result = 0;
+    $scope.$watch('result', function(){
+      if ($scope.result == 21)
+        alert('You just won!!');
+    })
 
     tiles.each(function(){
       var $this = $(this);
@@ -58,6 +69,19 @@ angular.module('starter.controllers', [])
         drop.removeClass('hover');
       }
     });
+
+    function startNew(){
+      //cards.html('<div ng-include="\'templates/cards.tpl.html\'"></div>');
+      console.log('start new');
+      $state.transitionTo($state.current, null, {reload: true, notify:true});
+
+    }
+
+    function deal(){
+      var index = getRandomInt(0, range - 1);
+      $scope.deal = NUMBERS[index];
+    }
+
   })
 
 .controller('ChatsCtrl', function($scope, Chats) {
