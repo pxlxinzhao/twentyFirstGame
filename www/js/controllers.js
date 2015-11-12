@@ -11,11 +11,12 @@ angular.module('starter.controllers', [])
 
     //some constant
     var moveOutAnimation = 'fadeOut';
-    var moveInAnimation = 'pulse';
+    var moveInAnimation = 'fadeIn';
 
     //start new game
     $scope.startNew = startNew;
     startNew();
+
     //for operator
     makeTilesMovable(tiles, 0, 500);
 
@@ -28,22 +29,25 @@ angular.module('starter.controllers', [])
 
     //define tile behaviour
 
-    //make droppable
-    makeDroppable();
-
-
 
     function startNew(){
-      deal();
-      $scope.cards = [];
 
-      for (var i=0; i<4; i++){
-        $scope.cards.push($scope.deal[i]);
-      }
+      cards.find('.tile').removeClass(moveOutAnimation + ' ' + moveInAnimation).addClass(moveOutAnimation);
 
-      $timeout(function(){
-        makeTilesMovable(cards.find('.tile'), 1000, 0);
-      });
+      setTimeout(function () {
+        deal();
+        $scope.cards = [];
+
+        for (var i=0; i<4; i++){
+          $scope.cards.push($scope.deal[i]);
+        }
+
+        $timeout(function(){
+          console.log('making movable');
+          makeTilesMovable(cards.find('.tile'), 2000, 0);
+        });
+      },800)
+
     }
 
     function deal(){
@@ -57,8 +61,12 @@ angular.module('starter.controllers', [])
 
       tiles.each(function(){
         var $this = $(this);
-        $this.removeClass(moveOutAnimation + ' ' + moveInAnimation).hide();
-        $this.show().addClass(moveInAnimation);
+        //$this.removeClass(moveOutAnimation + ' ' + moveInAnimation);
+          //.addClass(moveOutAnimation);
+        setTimeout(function(){
+          $this.removeClass(moveOutAnimation + ' ' + moveInAnimation).addClass(moveInAnimation);
+        },1000)
+
 
         if (!tileWidth){
           tileWidth = $this.width();
