@@ -10,13 +10,9 @@
     </div>
 
     <div id="cards" class="row">
-      <div class="tile col">{{deal[0]}}</div>
-      <div class="tile col">{{deal[1]}}</div>
-      <div class="tile col">{{deal[2]}}</div>
-      <div class="tile col">{{deal[3]}}</div>
-
-      <!--<div ng-include="'templates/cards.tpl.html'"></div>-->
+      <div class="tile col animated" ng-repeat="n in cards track by $index">{{n}}</div>
     </div>
+
     <div class="row">
       <div class="tile col">+</div>
       <div class="tile col">-</div>
@@ -32,3 +28,10 @@
 
   </ion-content>
 </ion-view>
+
+<!--<script type="text/ng-template" id="cardTpl">-->
+<!--<div class="tile col animated">{{deal[0]}}</div>-->
+<!--<div class="tile col animated">{{deal[1]}}</div>-->
+<!--<div class="tile col animated">{{deal[2]}}</div>-->
+<!--<div class="tile col animated">{{deal[3]}}</div>-->
+<!--</script>-->

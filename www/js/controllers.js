@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('DashCtrl', function($scope, $state) {
+.controller('DashCtrl', function($scope, $timeout) {
     var gameBoard = $("#game-board")
     var tiles = $(".tile");
     var drop = $(".tile-drop");
@@ -9,9 +9,15 @@ angular.module('starter.controllers', [])
     var range = NUMBERS.length;
     var cards = $('#cards');
 
+    //some constant
+    var moveOutAnimation = 'fadeOut';
+    var moveInAnimation = 'pulse';
+
     //start new game
     $scope.startNew = startNew;
-    deal();
+    startNew();
+    //for operator
+    makeTilesMovable(tiles, 0, 500);
 
     //do something when success
     $scope.result = 0;
@@ -20,73 +26,101 @@ angular.module('starter.controllers', [])
         alert('You just won!!');
     })
 
-    tiles.each(function(){
-      var $this = $(this);
-      if (!tileWidth){
-        tileWidth = $this.width();
-      }
-      $this.css({
-        'height': tileWidth,
-        'line-height': tileWidth - 10 + 'px',
-        'background-color': Colors[getRandomInt(0, 10)]
-      })
-      $this.draggable({
-        start: function( event, ui ) {
-          $scope.draggingTile = $this;
-        },
-        stop: function (event, ui) {
-        },
-        containment: gameBoard
-      });
-    });
+    //define tile behaviour
 
-    drop.css({
-      'line-height': tileWidth + 'px',
-      'height': tileWidth + 20
-    });
-    drop.droppable({
-      accept:'.tile',
-      drop: function(event, ui){
+    //make droppable
+    makeDroppable();
 
-        var value = $scope.draggingTile ? $scope.draggingTile.text() : '';
-        var newText = drop.text() + value;
-        drop.text(newText);
 
-        $scope.$apply(function(){
-          var result = myEval(newText);
-          $scope.result = result;
-        });
-
-        drop.removeClass('hover');
-        if ($scope.draggingTile)
-          $scope.draggingTile.addClass('animated rotateOut');
-      },
-      over: function(){
-        drop.addClass('hover');
-        placeholder.remove();
-      },
-      out: function(){
-        drop.removeClass('hover');
-      }
-    });
 
     function startNew(){
-      //cards.html('<div ng-include="\'templates/cards.tpl.html\'"></div>');
-      console.log('start new');
-      $state.transitionTo($state.current, null, {reload: true, notify:true});
+      deal();
+      $scope.cards = [];
 
+      for (var i=0; i<4; i++){
+        $scope.cards.push($scope.deal[i]);
+      }
+
+      $timeout(function(){
+        makeTilesMovable(cards.find('.tile'), 1000, 0);
+      });
     }
 
     function deal(){
       var index = getRandomInt(0, range - 1);
       $scope.deal = NUMBERS[index];
+      console.log($scope.deal);
     }
 
+    function makeTilesMovable(tiles, delay, duration){
+      console.log(tiles);
+
+      tiles.each(function(){
+        var $this = $(this);
+        $this.removeClass(moveOutAnimation + ' ' + moveInAnimation).hide();
+        $this.show().addClass(moveInAnimation);
+
+        if (!tileWidth){
+          tileWidth = $this.width();
+        }
+        $this.css({
+          'height': tileWidth,
+          'line-height': tileWidth - 10 + 'px',
+          'background-color': Colors[getRandomInt(0, 10)]
+        })
+        $this.draggable({
+          revert: function () {
+            $this.delay(delay);
+            return true
+          },
+          revertDuration: duration,
+          start: function( event, ui ) {
+            $scope.draggingTile = $this;
+          },
+          stop: function (event, ui) {
+          },
+          containment: gameBoard
+        });
+      });
+    }
+
+    function makeDroppable(){
+      drop.css({
+        'line-height': tileWidth + 'px',
+        'height': tileWidth + 20
+      });
+      drop.droppable({
+        accept:'.tile',
+        drop: function(event, ui){
+
+          var value = $scope.draggingTile ? $scope.draggingTile.text() : '';
+          var newText = drop.text() + value;
+          drop.text(newText);
+
+          $scope.$apply(function(){
+            var result = myEval(newText);
+            $scope.result = result;
+          });
+
+          drop.removeClass('hover');
+          //make tile disappear
+          if ($scope.draggingTile)
+            $scope.draggingTile.remove(moveInAnimation);
+            $scope.draggingTile.addClass(moveOutAnimation);
+        },
+        over: function(){
+          drop.addClass('hover');
+          placeholder.remove();
+        },
+        out: function(){
+          drop.removeClass('hover');
+        }
+      });
+    }
   })
 
 .controller('ChatsCtrl', function($scope, Chats) {
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
+  //$scope.$on('$ionicView.enter', function(e) {});
 
   $scope.chats = Chats.all();
   $scope.remove = function(chat) {
