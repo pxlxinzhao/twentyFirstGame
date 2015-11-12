@@ -4,7 +4,6 @@ angular.module('starter.controllers', [])
     var gameBoard = $("#game-board")
     var tiles = $(".tile");
     var drop = $(".tile-drop");
-    var tileWidth = null;
     var placeholder = drop.find('span');
     var range = NUMBERS.length;
     var cards = $('#cards');
@@ -15,10 +14,13 @@ angular.module('starter.controllers', [])
 
     //start new game
     $scope.startNew = startNew;
+    $scope.restart = restart;
     startNew();
 
     //for operator
     makeTilesMovable(tiles, 0, 500);
+    //drop area
+    makeDroppable();
 
     //do something when success
     $scope.result = 0;
@@ -28,26 +30,23 @@ angular.module('starter.controllers', [])
     })
 
     //define tile behaviour
-
-
     function startNew(){
+      drop.text('');
+      //create cardsio
+      deal();
+      $scope.cards = [];
+      for (var i=0; i<4; i++){
+        $scope.cards.push($scope.deal[i]);
+      }
+      //wait ng-repeat happen and make tile movable
+      $timeout(function(){
+        makeTilesMovable(cards.find('.tile'));
+      });
+    }
 
-      cards.find('.tile').removeClass(moveOutAnimation + ' ' + moveInAnimation).addClass(moveOutAnimation);
-
-      setTimeout(function () {
-        deal();
-        $scope.cards = [];
-
-        for (var i=0; i<4; i++){
-          $scope.cards.push($scope.deal[i]);
-        }
-
-        $timeout(function(){
-          console.log('making movable');
-          makeTilesMovable(cards.find('.tile'), 2000, 0);
-        });
-      },800)
-
+    function restart(){
+      drop.text('');
+      cards.find('.tile').css('opacity', '1');
     }
 
     function deal(){
@@ -57,31 +56,27 @@ angular.module('starter.controllers', [])
     }
 
     function makeTilesMovable(tiles, delay, duration){
-      console.log(tiles);
-
       tiles.each(function(){
         var $this = $(this);
-        //$this.removeClass(moveOutAnimation + ' ' + moveInAnimation);
-          //.addClass(moveOutAnimation);
-        setTimeout(function(){
-          $this.removeClass(moveOutAnimation + ' ' + moveInAnimation).addClass(moveInAnimation);
-        },1000)
+        $this.click(function(){
+          if ($this.css('opacity') != 0) drop.text(drop.text() + $this.text());
+          if (!$this.hasClass('operator')) $this.css('opacity', 0);
+        });
 
+        $this.css('opacity', '1');
 
-        if (!tileWidth){
-          tileWidth = $this.width();
-        }
         $this.css({
-          'height': tileWidth,
-          'line-height': tileWidth - 10 + 'px',
+          'height': $this.width(),
+          'line-height': $this.width() - 10 + 'px',
           'background-color': Colors[getRandomInt(0, 10)]
         })
+
         $this.draggable({
           revert: function () {
-            $this.delay(delay);
+            //$this.delay(delay);
             return true
           },
-          revertDuration: duration,
+          //revertDuration: duration,
           start: function( event, ui ) {
             $scope.draggingTile = $this;
           },
@@ -93,9 +88,11 @@ angular.module('starter.controllers', [])
     }
 
     function makeDroppable(){
+      var dropHeight = 60;
+
       drop.css({
-        'line-height': tileWidth + 'px',
-        'height': tileWidth + 20
+        'line-height': dropHeight + 'px',
+        'height': dropHeight + 20
       });
       drop.droppable({
         accept:'.tile',
@@ -112,9 +109,8 @@ angular.module('starter.controllers', [])
 
           drop.removeClass('hover');
           //make tile disappear
-          if ($scope.draggingTile)
-            $scope.draggingTile.remove(moveInAnimation);
-            $scope.draggingTile.addClass(moveOutAnimation);
+          if ($scope.draggingTile && !$scope.draggingTile.hasClass('operator')) $scope.draggingTile.css('opacity', '0');
+
         },
         over: function(){
           drop.addClass('hover');
@@ -176,3 +172,15 @@ function myEval(value) {
     return '...';
   }
 }
+
+
+//animation stuff
+
+//$this.removeClass(moveOutAnimation + ' ' + moveInAnimation);
+//.addClass(moveOutAnimation);
+//setTimeout(function(){
+//  $this.removeClass(moveOutAnimation + ' ' + moveInAnimation).addClass(moveInAnimation);
+//},1000)
+
+//$scope.draggingTile.remove(moveInAnimation);
+//$scope.draggingTile.addClass(moveOutAnimation);

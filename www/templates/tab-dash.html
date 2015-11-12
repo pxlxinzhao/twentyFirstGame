@@ -1,7 +1,7 @@
 <ion-view view-title="Gameboard">
   <ion-content id="game-board" class="padding" scroll="false">
 
-    <button class="button button-outline button-assertive button"> Restart </button>
+    <button class="button button-outline button-assertive button" ng-click="restart()"> Restart </button>
     <button class="button button-outline button-positive button" ng-click="startNew()"> Start a new game </button>
 
     <div class="display">
@@ -14,16 +14,16 @@
     </div>
 
     <div class="row">
-      <div class="tile col">+</div>
-      <div class="tile col">-</div>
-      <div class="tile col">*</div>
-      <div class="tile col">/</div>
-      <div class="tile col">(</div>
-      <div class="tile col">)</div>
+      <div class="tile col operator">+</div>
+      <div class="tile col operator">-</div>
+      <div class="tile col operator">*</div>
+      <div class="tile col operator">/</div>
+      <div class="tile col operator">(</div>
+      <div class="tile col operator">)</div>
     </div>
 
     <div class="tile-drop">
-      <span ng-hide="">Tiles goes here</span>
+      <!--<span ng-hide="">Tiles goes here</span>-->
     </div>
 
   </ion-content>
