@@ -10,10 +10,13 @@
     </div>
 
     <div id="cards" class="row">
-      <div class="tile col animated" ng-repeat="n in cards track by $index">{{n}}</div>
+      <!--<div class="tile col animated" ng-repeat="n in cards track by $index">{{n}}</div>-->
+      <div class="tile col animated" ng-repeat="n in pokerCards track by $index">
+        <img src="../img/cards/{{n}}"></div>
+      </div>
     </div>
 
-    <div class="row">
+    <div class="row operatorHolder">
       <div class="tile col operator">+</div>
       <div class="tile col operator">-</div>
       <div class="tile col operator">*</div>

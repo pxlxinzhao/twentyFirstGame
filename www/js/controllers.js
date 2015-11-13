@@ -15,6 +15,7 @@ angular.module('starter.controllers', [])
     //start new game
     $scope.startNew = startNew;
     $scope.restart = restart;
+    getCards();
     startNew();
 
     //for operator
@@ -120,6 +121,19 @@ angular.module('starter.controllers', [])
           drop.removeClass('hover');
         }
       });
+    }
+
+    function getCards(){
+      var cardNames = [];
+      var temp = CARDS;
+      var max = 64;
+
+      for (var i=0; i<4; i++){
+        var int = getRandomInt(0,max--);
+        cardNames.push(temp[int]);
+        temp.splice(int, 1);
+      }
+      $scope.pokerCards = cardNames;
     }
   })
 
